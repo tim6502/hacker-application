@@ -1,0 +1,26 @@
+
+Resume Demo
+by Tim Graham
+
+
+Quick Start:
+make && ./resume
+
+
+Requires:
+- gcc
+- ncurses
+
+
+Notes:
+- for Linux terminal, optimized for standard 80x24 and color (xterm...)
+- press any key when the animation is complete to exit, or hit ctrl-c at any time
+
+
+Known Issues:
+- the background may appear gray instead of black under gnome-terminal
+-- this is because its default palette (Tango) uses a light gray for black
+-- check Edit -> Profile Preferences -> Colors -> Palette
+-- select a different palette or change the first color to black
+
+

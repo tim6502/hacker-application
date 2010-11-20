@@ -1,0 +1,3 @@
+
+sshfs#<username>@<server>:<remote path> <local mount path> fuse defaults,noauto,user,idmap=user,port=<ssh port> 0 0
+

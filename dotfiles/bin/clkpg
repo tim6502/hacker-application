@@ -1,0 +1,8 @@
+#!/bin/bash
+
+curl -o /dev/null -s -w "%{http_code}: %{time_namelookup}, %{time_connect}, %{time_starttransfer}, %{time_total}\n" $1
+
+# http auth examples:
+# clkpg http://<username>:<password>@<server>/<path>
+# curl ... -u username:password <site>
+

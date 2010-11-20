@@ -1,0 +1,21 @@
+<?= $form->start() ?>
+	<fieldset>
+		<dl>
+		<? while ($key = $form->nextKey()) { ?>
+		  <dt><label for="<?= $form->getName($key) ?>"><?= $form->getLabel($key) ?></label><?= ($form->getInputOption($key, 'label_colon') !== false) ? ':' : '' ?></dt>
+		  <dd>
+				<?= $form->html($key) ?>
+				<? if ($key == 'age_time') { ?>
+					<? $key = $form->nextKey(); ?>
+					&nbsp;&nbsp;<?= $form->html($key) ?>
+				<? } ?>
+			</dd>
+		<? } ?>
+
+		</dl>
+
+		<?= $form->html('submit', array('attributes' => array('class' => 'button'))) ?>
+	</fieldset>
+<?= $form->end() ?>
+
+

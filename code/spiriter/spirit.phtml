@@ -1,0 +1,101 @@
+<?
+$drink_rec = $data['drink_rec'];
+$maker_rec = $data['maker_rec'];
+?>
+
+<div class="image-section" style="float: left; margin-right: 1em;">
+	<img src="<?= spiriterGetDrinkImageUrl($drink_rec) ?>" alt="loading image..." />
+</div>
+
+<a href="spirits/<?= html($drink_rec['drink_ident']) ?>/edit">Edit</a><br />
+<a href="spirits/<?= html($drink_rec['drink_ident']) ?>/review">Review</a><br />
+
+<p>
+	<dl>
+		<dt>Producer:</dt>
+		<dd><a href="producers/<?= html($maker_rec['maker_ident']) ?>"><?= html($maker_rec['name']) ?></a></dd>
+
+		<dt>Category:</dt>
+		<dd><?= html($drink_rec['category']) ?></dd>
+
+<?
+		$grain_list = arrayListField($drink_rec['grain_list'], 'grain');
+		if ($drink_rec['grain_other'] != null) {
+			$grain_list[] = $drink_rec['grain_other'];
+		}
+		if ($grain_list != null) {
+			$grain_str = implode(', ', $grain_list);
+?>
+			<dt>Distillates:</dt>
+			<dd><?= html($grain_str) ?></dd>
+<?
+		}
+?>
+
+		<dt>Aged:</dt>
+		<dd>
+		<? if ($drink_rec['aged_ind'] == 1) { ?>
+			<? if ($drink_rec['age_time'] == null && $drink_rec['barrel_type_label'] == null) { ?>
+				This spirit is aged<br />
+			<? } else { ?>
+				<?= html(formatSplice(', ', $drink_rec['age_time'] . ' ' . $drink_rec['age_time_units_label'], $drink_rec['barrel_type_label'])) ?>
+			<? } ?>
+		<? } else { ?>
+			This spirit is not aged<br />
+		<? } ?>
+		</dd>
+
+		<dt>Vintage:</dt>
+		<dd><?= html($drink_rec['vintage']) ?></dd>
+
+		<dt>% ABV:</dt>
+		<dd><?= filterReverse($drink_rec['alcohol_by_volume'], html($drink_rec['alcohol_by_volume']) . '%') ?></dd>
+
+		<? if ($drink_rec['retired_ind'] == 1) { ?>
+		<dt>Production Status:</dt>
+		<dd>This spirit is retired.</dd>
+		<? } ?>
+
+		<dt>Description:</dt>
+		<dd><?= html($drink_rec['description'], true) ?></dd>
+
+		<dt>Rating:</dt>
+		<dd>
+			<?= ($drink_rec['rating'] != null) ? (html($drink_rec['rating']) . ' out of 5') : 'N/A' ?>
+		</dd>
+
+		<dt>Reviews:</dt>
+		<dd>
+<?
+		if ($drink_rec['review_list']) {
+			foreach ($drink_rec['review_list'] as $review_rec) {
+?>
+			<a href="reviews/<?= html($review_rec['review_ident']) ?>">Rated <?= html($review_rec['rating']) ?> / 5</a> by <a href="people/<?= html($review_rec['user_rec']['username']) ?>"><?= html($review_rec['user_rec']['name']) ?></a> on <?= formatDateTime($review_rec['created_dttm']) ?><br />
+			<? if ($review_rec['comment'] != null) { ?>
+				<?= formatSummary($review_rec['comment'], 40) ?><br />
+			<? } ?>
+			<br />
+
+<?
+			}
+		}
+?>
+		</dd>
+
+		<dt>Tags:</dt>
+		<dd>
+<?
+			$tag_link_list = array();
+			if ($drink_rec['tag_list'] != null) {
+				foreach ($drink_rec['tag_list'] as $tag_rec) {
+					$tag_link_list[] = '<a href="tags/' . $tag_rec['tag_ident'] . '">' . html($tag_rec['tag']) . '</a>';
+				}
+			}
+?>
+			<?= implode(', ', $tag_link_list) ?>
+		</dd>
+	</dl>
+</p>
+
+
+

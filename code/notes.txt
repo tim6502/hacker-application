@@ -1,0 +1,120 @@
+
+I included a sample of code from 3 separate projects: 2 php sites and a prototype c driver
+for an led matrix I built.
+
+
+### spiriter
+
+This is a prototype liquor profile / review site I built for a friend. The site features
+login from a Twitter account, clean url's, complex form options managed by jQuery, and
+a custom auto form generator / processor. The site uses MVC organization but not as a
+conventional framework. The site uses cgi scripts directly as controller units, phtml
+templates for view elements, and a separate model that contains all the db interfaces.
+The site uses a set of custom but interchangeable classes for db abstraction, logging,
+session management, page organization, etc. All components are interchangeable so using
+Adodb, for example, instead of the native MySQL interface is not a problem.
+
+This was the first site I built with the auto form class. The form object handles html
+element generation, but uses templates for the actual layout of elements. The default
+template uses semantic html and the native element order, but all of that can be
+overridden by custom templates. In later sites I moved the form definition and javascript
+into separate classes that can be customized and reused across controllers, but that
+wasn't ready yet when I built this site.
+
+Instead of performing searches direction on they MySQL database, I used a separate
+indexer, Sphider, to build a full text search index of the actual content displayed.
+Currently the index refresh must be run manually, but for a live site updates would
+trigger an update index. The friend I built it for was supposed to do the styling for
+the site but he's flaked out on me so for now it's still a little frumpy looking with
+a prototype template and the Sphider search results are not integrated with the rest
+of the site.
+
+I've included the controller script and templates for two pages. There is a demo site
+running where you can see them in action.
+
+http://encorenotes.info/spiriter/
+
+Http login is:
+
+demo/spiriter
+
+You can login to the site with your Twitter account or with the above user/pass.
+
+# spiriter/add.*
+http://encorenotes.info/spiriter/spirits/add
+# spiriter/spirit.*
+http://encorenotes.info/spiriter/spirits/10_cane_rum
+# code not included
+http://encorenotes.info/spiriter/spirits/10_cane_rum/review
+
+
+
+### runez
+
+This is the web server element of a multiplayer turn based game. It is accessed via a
+REST interface so that it can support a variety of clients. I have plans for web, GTK,
+and Android clients, but none of them are ready yet. The web client would use ajax to
+interact with the game server so that the page is never reloaded. This allows animations
+to happen while waiting for server events. To see how this works you can play its
+predecessor, a Mancala implementation, here:
+
+http://netahead.info/demo/mancala/
+
+Unlike the Mancala game, this one lets users give an identifier for their game to simplify
+the join process. Multiple games can be played under the same identifier. The game uses
+a shared game state file that must be locked to prevent multiple clients from accessing it
+at once. All of this is managed by a parent class, StepGame, which the game engine inherits
+(see runez/runez.class.php).
+
+The engine does not have to run behind a rest interface. Because it is an independent unit,
+it could be used with soap or even behind a native app. The native app could provide ai
+players to make it a single player game. The rest interface is provided through controller
+scripts, similar to those described for the Spiriter project. I've included the script for
+the rest call to get game events. Clients poll this while waiting for events from the other
+players. I chose to use polling and have all rest requests return immediately instead of
+risking timeout problems by waiting for players to sync before returning. In fact, each
+client can run independently as far as is possible until action is needed from another player.
+Because of this, multiple game events may be returned with each call. Imagine if the game
+were Monopoly. Several players can take their turns without input from your client if those
+turns do not involve you. Then, all that turn info can be retrieved with a single get_events
+request.
+
+This game is a risk like territories game. The board can be any shape or size. The engine only
+needs to know which spaces are connected and who owns which space. The current version is
+hardwared to run a square grid, but the final version will use a board library to auto generate
+the space maps.
+
+
+
+### led_matrix_driver
+
+Eventually I would like to transition into embedded programming. This position at Spark Fun
+really appeals to me because it would give me some exposure to device making without me having
+to actually going back to school for an EE/ECE degree. In the meantime, electronics has become
+a hobby of mine, so my final code sample is the c driver for an led matrix display that I
+designed and built. This is a prototype driver that uses pthreads to refresh the display via
+a parallel port. The device driver is a shared library and implements the general entry point
+interface described in libmatrixdriver.h. I also wrote an ncurses based emulated display driver
+that I used for testing. The next step is to write a kernel driver (likely a uio module) and
+a separate driver library will be provided to access the kernel driver through the same
+interface. The driver can be built with a debug mode that dumps the scan byte pattern to the
+screen instead of sending it to the parallel port.
+
+There's a couple outstanding issues with the current version. The port address is currently
+hard wired. In the kernel module the port device can be passed via modprobe but I haven't
+decided how best to address this in the current driver. The device clock will eventually
+be run with the port's strobe line, but for the moment it is still the 8th bit of the data
+byte.
+
+I made some videos to explain the device and demo it as well as the emulated driver. Go easy
+on me - it's my first non trivial hardware device and my first YouTube videos.
+
+
+# Animation Demo
+http://www.youtube.com/user/timcodemonkey?feature=mhum#p/u/3/-5Y3NOJ949I
+
+# Device Explained
+http://www.youtube.com/user/timcodemonkey?feature=mhum#p/a/u/2/zoHe4Y6APIw
+
+
+

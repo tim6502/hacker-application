@@ -1,0 +1,47 @@
+#!/bin/bash
+
+function showUsage {
+	echo "Edit in place conversion of leading spaces to tabs"
+  echo "usage: fixtabs [-t <num spaces per tab>] <file> <file> ..."
+  echo "-t : number of spaces per tab (default 2)"
+  echo "-v|--version : print version information"
+  echo "-h|--help : this help message"
+}
+
+
+tmp=`mktemp`
+tabs=2
+files=( ) # list of files to fix
+
+while [ $# -gt 0 ]; do    # Until you run out of parameters . . .
+  case "$1" in
+  -h|--help)
+    showUsage
+    exit
+    ;;
+  -v|--version)
+    echo "fixtabs v1.0 for the Bash shell"
+    echo "by Tim Graham"
+    exit
+    ;;
+  -t)
+    tabs="$2"
+		shift
+    ;;
+  *)
+    files=( ${files[*]} $1 )
+    ;;
+  esac
+  shift       # Check next set of parameters.
+done
+
+
+for fname in ${files[*]}
+do
+	unexpand -t $tabs --first-only $fname > $tmp
+	cp $tmp $fname
+done
+
+# cleanup temp file
+rm $tmp
+

@@ -1,0 +1,19 @@
+set ts=2
+set sw=2
+set ic
+
+set noautoindent
+set nosmartindent
+set nocopyindent
+set nopreserveindent
+
+set nocindent
+"setglobal formatoptions=tc
+
+"set noshowmode
+
+" disable file specific formatting options
+"filetype off
+
+"set number
+

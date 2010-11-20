@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Tunneling to $1"
+ssh -f -D 8008 $1 -N
+

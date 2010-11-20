@@ -1,0 +1,43 @@
+I work on a variety of machines and often over a terminal to client systems, so I don't
+spend a lot of time customizing these environments. The exceptions are the editors and
+terminals. I set my terminals to white on black schemes and set some no nonsense options
+for vi/vim and nano.
+
+I tend to customize my environment by making sure I always have the right tools. I've
+included a sample of the general purpose tools I like to keep in my local bin directory.
+Here's a summary of the tools:
+
+
+bin/clkpg - show timings for fetching a web page
+- This uses curl to fetch a file from a uri and shows a break down of the time required.
+These times are show as time from the start, so you have to subtract the previous time
+to get just the deta for any particular op:
+time for dns lookup
+time to establish a connection
+time until the transfer starts - basically script processing time
+time for transfer to complete
+
+bin/tunnel - establish an ssh tunnel to a remote server
+- This one is newer. It will need an option to set the local port and be able to show
+usage, etc.
+
+bin/fixtabs - convert leading spaces to tabs
+- A more mature tool, this bash script does a batch transformation of indenting spaces
+to tabs. It handles the temp files automatically for in place editing and lets you
+specify the number of spaces in the original "tab" size.
+
+rmcr - remove carriage return characters
+- This can easily be done with sed or tr, but I wanted a way to fix multiple files in
+place and I wrote this before I knew about sed -i. This app takes care of temp file
+management.
+
+realpath - show the full expanded path of a file or directory
+- There is ever more frequently a distro tool for this, but I still keep it for systems
+that don't have it.
+
+
+I frequently work over sshfs and one thing I like to do is setup my sshfs mounts in
+/etc/fstab. I show the general format for that in fstab.sshfs. This is nice time saver
+and lets me mount a remote share with: mount <mount path>
+
+
